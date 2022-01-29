@@ -50,9 +50,13 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /proc/:/host/proc/:ro
       - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+      - /opt/datadog-agent/run:/opt/datadog-agent/run:rw
     environment:
-      - DD_API_KEY=07d384d945326d94cd331eac7958b5b5
+      - DD_API_KEY=<redacted>
       - DD_APM_ENABLED=true
       - DD_SITE=datadoghq.com
       - DD_APM_NON_LOCAL_TRAFFIC=true
       - DD_DOGSTATSD_TAGS="user:sin"
+      - DD_LOGS_ENABLED=true
+      - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
+      - DD_CONTAINER_EXCLUDE_LOGS="name:datadog-agent"
