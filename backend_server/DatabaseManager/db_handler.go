@@ -1,17 +1,20 @@
 package DatabaseManager
 
 import (
+	"context"
 	"database/sql"
 	"errors"
 	"fmt"
 	"log"
 	"time"
 
-	_ "github.com/go-sql-driver/mysql"
+	"github.com/go-sql-driver/mysql"
+	sqltrace "gopkg.in/DataDog/dd-trace-go.v1/contrib/database/sql"
 )
 
 func OpenDatabase() (db *sql.DB) {
-	db, err := sql.Open("mysql", "tracker:@tcp(localhost:3306)/tracker_db")
+	sqltrace.Register("mysql", mysql.MySQLDriver{})
+	db, err := sqltrace.Open("mysql", "tracker:ddog@tcp(mysql:3306)/tracker_db")
 
 	if err != nil {
 		log.Fatal(err)
@@ -23,11 +26,25 @@ func OpenDatabase() (db *sql.DB) {
 	return db
 }
 
-func DBInsert(db *sql.DB, table string, columns string, values string) (err error) {
+func DBInsert(ctx context.Context, db *sql.DB, table string, columns string, values string) (err error) {
 	query_string := "INSERT INTO " + table + "(" + columns + ") VALUES (" + values + ")"
 	fmt.Println(query_string)
 
-	insert, err := db.Query(query_string)
+	insert, err := db.QueryContext(ctx, query_string)
+	if err != nil {
+		return err
+	}
+
+	defer insert.Close()
+	return nil
+}
+
+func DBDelete(ctx context.Context, db *sql.DB, table string, column string, value string) (err error) {
+	query_string := "DELETE FROM " + table + " WHERE " + column + " = \"" + value + "\""
+
+	fmt.Println(query_string)
+
+	insert, err := db.QueryContext(ctx, query_string)
 	if err != nil {
 		return err
 	}
@@ -42,10 +59,10 @@ type Stock struct {
 	Description string `json:"description"`
 }
 
-func DBSelectTicker(db *sql.DB, ticker string) (stock Stock, err error) {
+func DBSelectTicker(ctx context.Context, db *sql.DB, ticker string) (stock Stock, err error) {
 	query_string := "SELECT * FROM stocks_tab WHERE ticker =\"" + ticker + "\";"
 
-	err = db.QueryRow(query_string).Scan(&stock.Ticker, &stock.Company, &stock.Description)
+	err = db.QueryRowContext(ctx, query_string).Scan(&stock.Ticker, &stock.Company, &stock.Description)
 
 	if err != nil {
 		print(err.Error())

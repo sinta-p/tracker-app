@@ -22,6 +22,8 @@ package grpc;
 service TickerManager {
   // get a ticker information
   rpc SelectTicker (TickerRequest) returns (StockInfo) {}
+  rpc InsertTicker (StockInfo) returns (Status) {}
+  rpc DeleteTicker (TickerRequest) returns (Status) {}
 }
 
 // The request message containing the ticker.
@@ -34,4 +36,9 @@ message StockInfo {
   string ticker = 1;
   string company = 2;
   string description = 3;
+}
+
+// The response message containing the status of request 
+message Status {
+  bool success = 1;
 }

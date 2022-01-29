@@ -1,0 +1,2 @@
+INSERT INTO stocks_tab (ticker, company, description) VALUES ("DDOG", "Datadog", "SaaS monitoring and Security platform" );
+INSERT INTO stocks_tab (ticker, company, description) VALUES ("TWLO", "Twillo", "Cloud Communication platform" );

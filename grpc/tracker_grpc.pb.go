@@ -24,6 +24,8 @@ const _ = grpc.SupportPackageIsVersion7
 type TickerManagerClient interface {
 	// get a ticker information
 	SelectTicker(ctx context.Context, in *TickerRequest, opts ...grpc.CallOption) (*StockInfo, error)
+	InsertTicker(ctx context.Context, in *StockInfo, opts ...grpc.CallOption) (*Status, error)
+	DeleteTicker(ctx context.Context, in *TickerRequest, opts ...grpc.CallOption) (*Status, error)
 }
 
 type tickerManagerClient struct {
@@ -43,12 +45,32 @@ func (c *tickerManagerClient) SelectTicker(ctx context.Context, in *TickerReques
 	return out, nil
 }
 
+func (c *tickerManagerClient) InsertTicker(ctx context.Context, in *StockInfo, opts ...grpc.CallOption) (*Status, error) {
+	out := new(Status)
+	err := c.cc.Invoke(ctx, "/grpc.TickerManager/InsertTicker", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *tickerManagerClient) DeleteTicker(ctx context.Context, in *TickerRequest, opts ...grpc.CallOption) (*Status, error) {
+	out := new(Status)
+	err := c.cc.Invoke(ctx, "/grpc.TickerManager/DeleteTicker", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TickerManagerServer is the server API for TickerManager service.
 // All implementations must embed UnimplementedTickerManagerServer
 // for forward compatibility
 type TickerManagerServer interface {
 	// get a ticker information
 	SelectTicker(context.Context, *TickerRequest) (*StockInfo, error)
+	InsertTicker(context.Context, *StockInfo) (*Status, error)
+	DeleteTicker(context.Context, *TickerRequest) (*Status, error)
 	mustEmbedUnimplementedTickerManagerServer()
 }
 
@@ -58,6 +80,12 @@ type UnimplementedTickerManagerServer struct {
 
 func (UnimplementedTickerManagerServer) SelectTicker(context.Context, *TickerRequest) (*StockInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SelectTicker not implemented")
+}
+func (UnimplementedTickerManagerServer) InsertTicker(context.Context, *StockInfo) (*Status, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method InsertTicker not implemented")
+}
+func (UnimplementedTickerManagerServer) DeleteTicker(context.Context, *TickerRequest) (*Status, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteTicker not implemented")
 }
 func (UnimplementedTickerManagerServer) mustEmbedUnimplementedTickerManagerServer() {}
 
@@ -90,6 +118,42 @@ func _TickerManager_SelectTicker_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TickerManager_InsertTicker_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StockInfo)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TickerManagerServer).InsertTicker(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/grpc.TickerManager/InsertTicker",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TickerManagerServer).InsertTicker(ctx, req.(*StockInfo))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TickerManager_DeleteTicker_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TickerRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TickerManagerServer).DeleteTicker(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/grpc.TickerManager/DeleteTicker",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TickerManagerServer).DeleteTicker(ctx, req.(*TickerRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TickerManager_ServiceDesc is the grpc.ServiceDesc for TickerManager service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -100,6 +164,14 @@ var TickerManager_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SelectTicker",
 			Handler:    _TickerManager_SelectTicker_Handler,
+		},
+		{
+			MethodName: "InsertTicker",
+			Handler:    _TickerManager_InsertTicker_Handler,
+		},
+		{
+			MethodName: "DeleteTicker",
+			Handler:    _TickerManager_DeleteTicker_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

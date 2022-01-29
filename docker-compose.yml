@@ -1,0 +1,58 @@
+version: '3.9'
+
+services:
+  http:
+    image: sinta-p/tracker-app-http
+    restart: always
+    ports:
+      - 1313:1313
+    environment:
+      - DD_AGENT_HOST=datadog-agent
+      - DD_TRACE_AGENT_PORT=8126
+      - DD_ENV="staging"
+      - DD_SERVICE="tracker"
+      - DD_VERSION="1.1"
+    labels:
+      - com.datadoghq.tags.env:"staging"
+      - com.datadoghq.tags.service:"tracker"
+      - com.datadoghq.tags.version:"1.1"
+
+  backend: 
+    image: sinta-p/tracker-app-backend
+    ports:
+      - 50051:50051
+    environment:
+      - DD_AGENT_HOST=datadog-agent
+      - DD_TRACE_AGENT_PORT=8126
+      - DD_ENV="staging"
+      - DD_SERVICE="tracker"
+      - DD_VERSION="1.1"
+
+  mysql:
+    image: mysql:8
+    ports:
+      - 3306:3306
+    volumes:
+      - ./data_volume:/var/lib/mysql
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    environment:
+      - MYSQL_ROOT_PASSWORD=ddog
+      - MYSQL_PASSWORD=ddog
+      - MYSQL_USER=tracker
+      - MYSQL_DATABASE=tracker_db
+      - DD_AGENT_HOST=datadog-agent
+
+  datadog-agent:
+    image: gcr.io/datadoghq/agent:latest
+    ports:
+      - 8128:8126
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+    environment:
+      - DD_API_KEY=07d384d945326d94cd331eac7958b5b5
+      - DD_APM_ENABLED=true
+      - DD_SITE=datadoghq.com
+      - DD_APM_NON_LOCAL_TRAFFIC=true
+      - DD_DOGSTATSD_TAGS="user:sin"
