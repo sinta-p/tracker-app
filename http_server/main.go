@@ -16,6 +16,7 @@ import (
 
 	"google.golang.org/grpc"
 	grpctrace "gopkg.in/DataDog/dd-trace-go.v1/contrib/google.golang.org/grpc"
+	"gopkg.in/DataDog/dd-trace-go.v1/profiler"
 
 	muxtrace "gopkg.in/DataDog/dd-trace-go.v1/contrib/gorilla/mux"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
@@ -33,12 +34,17 @@ var Stocks []Stock
 // GET single stock
 func returnSingleStock(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
+
+	for k, v := range vars {
+		fmt.Println(k, ":", v)
+	}
+
 	ticker := strings.ToUpper(vars["ticker"])
 
 	fmt.Println("Endpoint Hit: returnSingleStock - " + ticker)
 
 	// Contact the backend and print out its response.
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(r.Context(), time.Second)
 	defer cancel()
 	reply, err := c.SelectTicker(ctx, &pb.TickerRequest{Ticker: ticker})
 	if err != nil {
@@ -115,7 +121,7 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleRequests() {
-	myRouter := muxtrace.NewRouter().StrictSlash(true)
+	myRouter := muxtrace.NewRouter(muxtrace.WithServiceName("tracer-http")).StrictSlash(true)
 
 	myRouter.HandleFunc("/", homePage)
 	myRouter.HandleFunc("/stocks", returnAllStocks)
@@ -135,12 +141,39 @@ var (
 func main() {
 	flag.Parse()
 	//set up tracer
-	tracer.Start(tracer.WithAgentAddr("datadog-agent:8126"))
+	tracer.Start(
+		tracer.WithEnv("dev"),
+		tracer.WithService("http-client"),
+		tracer.WithServiceVersion("1.0.0"),
+		tracer.WithAgentAddr("datadog-agent:8126"),
+	)
 	defer tracer.Stop()
 
+	// set up profiler
+	err := profiler.Start(
+		profiler.WithService("http-client"),
+		profiler.WithEnv("dev"),
+		profiler.WithVersion("1.0.0"),
+		profiler.WithTags("owner:sin,app:tracker-app"),
+		profiler.WithProfileTypes(
+			profiler.CPUProfile,
+			profiler.HeapProfile,
+			// The profiles below are disabled by default to keep overhead
+			// low, but can be enabled as needed.
+
+			profiler.BlockProfile,
+			profiler.MutexProfile,
+			profiler.GoroutineProfile,
+		),
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer profiler.Stop()
+
 	// Create the client interceptor using the grpc trace package.
-	si := grpctrace.StreamClientInterceptor(grpctrace.WithServiceName("my-grpc-client"))
-	ui := grpctrace.UnaryClientInterceptor(grpctrace.WithServiceName("my-grpc-client"))
+	si := grpctrace.StreamClientInterceptor(grpctrace.WithServiceName("grpc"))
+	ui := grpctrace.UnaryClientInterceptor(grpctrace.WithServiceName("grpc"))
 
 	// set up grpc
 	conn, err := grpc.Dial(*addr, grpc.WithInsecure(), grpc.WithStreamInterceptor(si), grpc.WithUnaryInterceptor(ui))

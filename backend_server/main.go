@@ -13,6 +13,7 @@ import (
 	pb "github.com/sinta-p/tracker-app/backend_server/grpc"
 	grpctrace "gopkg.in/DataDog/dd-trace-go.v1/contrib/google.golang.org/grpc"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
+	"gopkg.in/DataDog/dd-trace-go.v1/profiler"
 )
 
 var db = DatabaseManager.OpenDatabase()
@@ -74,12 +75,39 @@ func main() {
 	flag.Parse()
 
 	//set up tracer
-	tracer.Start(tracer.WithAgentAddr("datadog-agent:8126"))
+	tracer.Start(
+		tracer.WithEnv("dev"),
+		tracer.WithService("ticker-manager"),
+		tracer.WithServiceVersion("1.0.0"),
+		tracer.WithAgentAddr("datadog-agent:8126"),
+	)
 	defer tracer.Stop()
 
+	// set up profiler
+	err := profiler.Start(
+		profiler.WithService("ticker-manager"),
+		profiler.WithEnv("dev"),
+		profiler.WithVersion("1.0.0"),
+		profiler.WithTags("owner:sin,app:tracker-app"),
+		profiler.WithProfileTypes(
+			profiler.CPUProfile,
+			profiler.HeapProfile,
+			// The profiles below are disabled by default to keep overhead
+			// low, but can be enabled as needed.
+
+			profiler.BlockProfile,
+			profiler.MutexProfile,
+			profiler.GoroutineProfile,
+		),
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer profiler.Stop()
+
 	// Create the client interceptor using the grpc trace package.
-	si := grpctrace.StreamServerInterceptor(grpctrace.WithServiceName("TicketManager"))
-	ui := grpctrace.UnaryServerInterceptor(grpctrace.WithServiceName("TicketManager"))
+	si := grpctrace.StreamServerInterceptor(grpctrace.WithServiceName("ticker-manager"))
+	ui := grpctrace.UnaryServerInterceptor(grpctrace.WithServiceName("ticker-manager"))
 
 	// Create a listener for the server
 	lis, err := net.Listen("tcp", fmt.Sprintf("backend:%d", *port))
