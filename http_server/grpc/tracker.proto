@@ -26,6 +26,13 @@ service TickerManager {
   rpc DeleteTicker (TickerRequest) returns (Status) {}
 }
 
+service TickerManager2 {
+  // get a ticker information
+  rpc SelectTicker2 (TickerRequest) returns (StockInfo) {}
+  rpc InsertTicker (StockInfo) returns (Status) {}
+  rpc DeleteTicker (TickerRequest) returns (Status) {}
+}
+
 // The request message containing the ticker.
 message TickerRequest {
   string ticker = 1;

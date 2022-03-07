@@ -35,10 +35,6 @@ var Stocks []Stock
 func returnSingleStock(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
-	for k, v := range vars {
-		fmt.Println(k, ":", v)
-	}
-
 	ticker := strings.ToUpper(vars["ticker"])
 
 	fmt.Println("Endpoint Hit: returnSingleStock - " + ticker)
@@ -46,7 +42,15 @@ func returnSingleStock(w http.ResponseWriter, r *http.Request) {
 	// Contact the backend and print out its response.
 	ctx, cancel := context.WithTimeout(r.Context(), time.Second)
 	defer cancel()
+	// method 1: original
 	reply, err := c.SelectTicker(ctx, &pb.TickerRequest{Ticker: ticker})
+	if err != nil {
+		log.Fatalf("could not query: %v", err)
+	} else {
+		log.Printf("query successful: %s", ticker)
+	}
+	// method 2: high cpu time
+	reply, err = c2.SelectTicker2(ctx, &pb.TickerRequest{Ticker: ticker})
 	if err != nil {
 		log.Fatalf("could not query: %v", err)
 	} else {
@@ -136,6 +140,7 @@ func handleRequests() {
 var (
 	addr = flag.String("addr", "backend:50051", "the address to connect to")
 	c    = pb.NewTickerManagerClient(nil)
+	c2   = pb.NewTickerManager2Client(nil)
 )
 
 func main() {
