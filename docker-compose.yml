@@ -17,10 +17,21 @@ services:
       - com.datadoghq.tags.service:"tracker"
       - com.datadoghq.tags.version:"1.1"
 
-  backend:
+  backend-main:
     image: sinta-p/tracker-app-backend
     ports:
       - 50051:50051
+    environment:
+      - DD_AGENT_HOST=datadog-agent
+      - DD_TRACE_AGENT_PORT=8126
+      - DD_ENV="staging"
+      - DD_SERVICE="tracker"
+      - DD_VERSION="1.1"
+
+  backend-high-cpu:
+    image: sinta-p/tracker-app-backend-high-cpu
+    ports:
+      - 50052:50052
     environment:
       - DD_AGENT_HOST=datadog-agent
       - DD_TRACE_AGENT_PORT=8126

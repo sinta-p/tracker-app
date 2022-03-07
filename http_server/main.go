@@ -138,9 +138,10 @@ func handleRequests() {
 }
 
 var (
-	addr = flag.String("addr", "backend:50051", "the address to connect to")
-	c    = pb.NewTickerManagerClient(nil)
-	c2   = pb.NewTickerManager2Client(nil)
+	// addr  = flag.String("addr", "backend:50051", "the address to connect to")
+	// addr2 = flag.String("addr", "backend:50052", "the address to connect to")
+	c  = pb.NewTickerManagerClient(nil)
+	c2 = pb.NewTickerManager2Client(nil)
 )
 
 func main() {
@@ -181,12 +182,20 @@ func main() {
 	ui := grpctrace.UnaryClientInterceptor(grpctrace.WithServiceName("grpc"))
 
 	// set up grpc
-	conn, err := grpc.Dial(*addr, grpc.WithInsecure(), grpc.WithStreamInterceptor(si), grpc.WithUnaryInterceptor(ui))
+	conn, err := grpc.Dial("backend-main:50051", grpc.WithInsecure(), grpc.WithStreamInterceptor(si), grpc.WithUnaryInterceptor(ui))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
 	c = pb.NewTickerManagerClient(conn)
+
+	// set up grpc
+	conn2, err := grpc.Dial("backend-high-cpu:50052", grpc.WithInsecure(), grpc.WithStreamInterceptor(si), grpc.WithUnaryInterceptor(ui))
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conn2.Close()
+	c2 = pb.NewTickerManager2Client(conn2)
 
 	//take http request
 	handleRequests()

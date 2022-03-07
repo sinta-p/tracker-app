@@ -1,4 +1,4 @@
-module github.com/sinta-p/tracker-app/backend_server
+module github.com/sinta-p/tracker-app/backend_server_high_cpu
 
 go 1.17
 

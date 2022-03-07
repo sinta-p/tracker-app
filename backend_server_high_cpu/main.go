@@ -63,7 +63,7 @@ func (s *server) SelectTicker2(ctx context.Context, in *pb.TickerRequest) (*pb.S
 
 // grpc declarations
 var (
-	port = flag.Int("port", 50051, "The server port")
+	port = flag.Int("port", 50052, "The server port")
 )
 
 type server struct {
@@ -110,7 +110,7 @@ func main() {
 	ui := grpctrace.UnaryServerInterceptor(grpctrace.WithServiceName("ticker-manager"))
 
 	// Create a listener for the server
-	lis, err := net.Listen("tcp", fmt.Sprintf("backend:%d", *port))
+	lis, err := net.Listen("tcp", fmt.Sprintf("backend-high-cpu:%d", *port))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}

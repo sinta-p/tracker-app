@@ -11,7 +11,6 @@ ENV GO111MODULE=on \
 WORKDIR /build
 
 # Copy and download dependency using go mod
-RUN go mod tidy
 COPY go.mod .
 COPY go.sum .
 RUN go mod download
@@ -29,7 +28,7 @@ WORKDIR /dist
 RUN cp /build/main .
 
 # Export necessary port
-EXPOSE 50051
+EXPOSE 50052
 
 # Command to run when starting the container
 CMD ["/dist/main"]
