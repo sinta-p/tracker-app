@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"math/rand"
 	"net"
 
 	"google.golang.org/grpc"
@@ -51,12 +52,25 @@ func (s *server) DeleteTicker(ctx context.Context, in *pb.TickerRequest) (*pb.St
 	}
 }
 
+// Fibonacci sequence
+// time complexity: O(2^n)
+func FibonacciRecursion(n int) int {
+	if n <= 1 {
+		return n
+	}
+	return FibonacciRecursion(n-1) + FibonacciRecursion(n-2)
+}
+
 func (s *server) SelectTicker2(ctx context.Context, in *pb.TickerRequest) (*pb.StockInfo, error) {
 
 	stock, err := DatabaseManager.DBSelectTicker(ctx, db, in.GetTicker())
 	if err != nil {
 		log.Printf("Unexpected error, err:%s", err)
 	}
+
+	// bug to increase time complexity
+	x := rand.Intn(10) + 30
+	_ = FibonacciRecursion(x)
 
 	return &pb.StockInfo{Ticker: stock.Ticker, Company: stock.Company, Description: stock.Description}, err
 }
@@ -77,7 +91,7 @@ func main() {
 	//set up tracer
 	tracer.Start(
 		tracer.WithEnv("dev"),
-		tracer.WithService("ticker-manager"),
+		tracer.WithService("ticker-manager2"),
 		tracer.WithServiceVersion("1.0.0"),
 		tracer.WithAgentAddr("datadog-agent:8126"),
 	)
@@ -85,7 +99,7 @@ func main() {
 
 	// set up profiler
 	err := profiler.Start(
-		profiler.WithService("ticker-manager"),
+		profiler.WithService("ticker-manager2"),
 		profiler.WithEnv("dev"),
 		profiler.WithVersion("1.0.0"),
 		profiler.WithTags("owner:sin,app:tracker-app"),
@@ -106,8 +120,8 @@ func main() {
 	defer profiler.Stop()
 
 	// Create the client interceptor using the grpc trace package.
-	si := grpctrace.StreamServerInterceptor(grpctrace.WithServiceName("ticker-manager"))
-	ui := grpctrace.UnaryServerInterceptor(grpctrace.WithServiceName("ticker-manager"))
+	si := grpctrace.StreamServerInterceptor(grpctrace.WithServiceName("ticker-manager2"))
+	ui := grpctrace.UnaryServerInterceptor(grpctrace.WithServiceName("ticker-manager2"))
 
 	// Create a listener for the server
 	lis, err := net.Listen("tcp", fmt.Sprintf("backend-high-cpu:%d", *port))

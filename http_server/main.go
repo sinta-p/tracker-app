@@ -56,6 +56,13 @@ func returnSingleStock(w http.ResponseWriter, r *http.Request) {
 	} else {
 		log.Printf("query successful: %s", ticker)
 	}
+	// method 3: high mem allocation
+	reply, err = c3.SelectTicker3(ctx, &pb.TickerRequest{Ticker: ticker})
+	if err != nil {
+		log.Fatalf("could not query: %v", err)
+	} else {
+		log.Printf("query successful: %s", ticker)
+	}
 
 	var targetStock Stock
 	targetStock.Ticker = reply.GetTicker()
@@ -142,6 +149,7 @@ var (
 	// addr2 = flag.String("addr", "backend:50052", "the address to connect to")
 	c  = pb.NewTickerManagerClient(nil)
 	c2 = pb.NewTickerManager2Client(nil)
+	c3 = pb.NewTickerManager3Client(nil)
 )
 
 func main() {
@@ -189,13 +197,21 @@ func main() {
 	defer conn.Close()
 	c = pb.NewTickerManagerClient(conn)
 
-	// set up grpc
+	// set up grpc 2
 	conn2, err := grpc.Dial("backend-high-cpu:50052", grpc.WithInsecure(), grpc.WithStreamInterceptor(si), grpc.WithUnaryInterceptor(ui))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn2.Close()
 	c2 = pb.NewTickerManager2Client(conn2)
+
+	// set up grpc 3
+	conn3, err := grpc.Dial("backend-high-alloc:50053", grpc.WithInsecure(), grpc.WithStreamInterceptor(si), grpc.WithUnaryInterceptor(ui))
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conn2.Close()
+	c3 = pb.NewTickerManager3Client(conn3)
 
 	//take http request
 	handleRequests()

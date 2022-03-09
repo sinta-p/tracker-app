@@ -39,6 +39,17 @@ services:
       - DD_SERVICE="tracker"
       - DD_VERSION="1.1"
 
+  backend-high-alloc:
+    image: sinta-p/tracker-app-backend-high-alloc
+    ports:
+      - 50053:50053
+    environment:
+      - DD_AGENT_HOST=datadog-agent
+      - DD_TRACE_AGENT_PORT=8126
+      - DD_ENV="staging"
+      - DD_SERVICE="tracker"
+      - DD_VERSION="1.1"
+
   mysql:
     image: mysql:8
     ports:
