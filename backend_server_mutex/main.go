@@ -68,6 +68,7 @@ var c = Counter{
 func (c *Counter) inc() {
 	c.mu.Lock()
 	defer c.mu.Unlock()
+	//error: used counter instead of cooldown leading to constant increase in blocking time
 	time.Sleep(time.Duration(c.counter) * time.Second)
 	c.counter += 1
 	log.Printf("counter value:%d", c.counter)
