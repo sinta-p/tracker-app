@@ -9,13 +9,13 @@ services:
     environment:
       - DD_AGENT_HOST=datadog-agent
       - DD_TRACE_AGENT_PORT=8126
-      - DD_ENV="staging"
-      - DD_SERVICE="tracker"
-      - DD_VERSION="1.1"
+      - DD_ENV=dev
+      - DD_SERVICE=tracker
+      - DD_VERSION=1.1
     labels:
-      - com.datadoghq.tags.env:"staging"
-      - com.datadoghq.tags.service:"tracker"
-      - com.datadoghq.tags.version:"1.1"
+      - com.datadoghq.tags.env:dev
+      - com.datadoghq.tags.service:tracker
+      - com.datadoghq.tags.version:1.1
 
   backend-main:
     image: sinta-p/tracker-app-backend
@@ -24,9 +24,9 @@ services:
     environment:
       - DD_AGENT_HOST=datadog-agent
       - DD_TRACE_AGENT_PORT=8126
-      - DD_ENV="staging"
-      - DD_SERVICE="tracker"
-      - DD_VERSION="1.1"
+      - DD_ENV=dev
+      - DD_SERVICE=tracker
+      - DD_VERSION=1.1
 
   backend-high-cpu:
     image: sinta-p/tracker-app-backend-high-cpu
@@ -35,9 +35,9 @@ services:
     environment:
       - DD_AGENT_HOST=datadog-agent
       - DD_TRACE_AGENT_PORT=8126
-      - DD_ENV="staging"
-      - DD_SERVICE="tracker"
-      - DD_VERSION="1.1"
+      - DD_ENV=dev
+      - DD_SERVICE=tracker
+      - DD_VERSION=1.1
 
   backend-high-alloc:
     image: sinta-p/tracker-app-backend-high-alloc
@@ -46,9 +46,32 @@ services:
     environment:
       - DD_AGENT_HOST=datadog-agent
       - DD_TRACE_AGENT_PORT=8126
-      - DD_ENV="staging"
-      - DD_SERVICE="tracker"
-      - DD_VERSION="1.1"
+      - DD_ENV=dev
+      - DD_SERVICE=tracker
+      - DD_VERSION=1.1
+
+  backend-high-heap:
+    image: sinta-p/tracker-app-backend-high-heap
+    ports:
+      - 50054:50054
+    environment:
+      - DD_AGENT_HOST=datadog-agent
+      - DD_TRACE_AGENT_PORT=8126
+      - DD_ENV=dev
+      - DD_SERVICE=tracker
+      - DD_VERSION=1.1
+
+  backend-mutex:
+    image: sinta-p/tracker-app-backend-mutex
+    ports:
+      - 50055:50055
+    environment:
+      - DD_AGENT_HOST=datadog-agent
+      - DD_TRACE_AGENT_PORT=8126
+      - DD_ENV=dev
+      - DD_SERVICE=tracker
+      - DD_VERSION=1.1
+
 
   mysql:
     image: mysql:8

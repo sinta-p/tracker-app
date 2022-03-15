@@ -56,8 +56,22 @@ func returnSingleStock(w http.ResponseWriter, r *http.Request) {
 	} else {
 		log.Printf("query successful: %s", ticker)
 	}
-	// method 3: high mem allocation
+	// method 3: high allocation
 	reply, err = c3.SelectTicker3(ctx, &pb.TickerRequest{Ticker: ticker})
+	if err != nil {
+		log.Fatalf("could not query: %v", err)
+	} else {
+		log.Printf("query successful: %s", ticker)
+	}
+	// method 4: high heap
+	reply, err = c4.SelectTicker4(ctx, &pb.TickerRequest{Ticker: ticker})
+	if err != nil {
+		log.Fatalf("could not query: %v", err)
+	} else {
+		log.Printf("query successful: %s", ticker)
+	}
+	// method 4: mutex operation
+	reply, err = c5.SelectTicker5(ctx, &pb.TickerRequest{Ticker: ticker})
 	if err != nil {
 		log.Fatalf("could not query: %v", err)
 	} else {
@@ -150,6 +164,8 @@ var (
 	c  = pb.NewTickerManagerClient(nil)
 	c2 = pb.NewTickerManager2Client(nil)
 	c3 = pb.NewTickerManager3Client(nil)
+	c4 = pb.NewTickerManager4Client(nil)
+	c5 = pb.NewTickerManager5Client(nil)
 )
 
 func main() {
@@ -210,8 +226,24 @@ func main() {
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
-	defer conn2.Close()
+	defer conn3.Close()
 	c3 = pb.NewTickerManager3Client(conn3)
+
+	// set up grpc 4
+	conn4, err := grpc.Dial("backend-high-heap:50054", grpc.WithInsecure(), grpc.WithStreamInterceptor(si), grpc.WithUnaryInterceptor(ui))
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conn4.Close()
+	c4 = pb.NewTickerManager4Client(conn4)
+
+	// set up grpc 5
+	conn5, err := grpc.Dial("backend-mutex:50055", grpc.WithInsecure(), grpc.WithStreamInterceptor(si), grpc.WithUnaryInterceptor(ui))
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conn5.Close()
+	c5 = pb.NewTickerManager5Client(conn5)
 
 	//take http request
 	handleRequests()

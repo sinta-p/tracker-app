@@ -55,11 +55,10 @@ func (s *server) DeleteTicker(ctx context.Context, in *pb.TickerRequest) (*pb.St
 
 var size = 64 * 1024 //65536
 
-func createUselessHeap(iter int) {
-	for i := 0; i < iter; i++ {
-		dataLarge := make([]byte, size)
-		_ = dataLarge
-	}
+func createUselessHeap() {
+	dataExtraLarge := make([]byte, size*1024) //ie consuming ~64GiB
+	_ = dataExtraLarge
+
 }
 
 func (s *server) SelectTicker3(ctx context.Context, in *pb.TickerRequest) (*pb.StockInfo, error) {
@@ -69,7 +68,7 @@ func (s *server) SelectTicker3(ctx context.Context, in *pb.TickerRequest) (*pb.S
 		log.Printf("Unexpected error, err:%s", err)
 	}
 	// Usage of function to create heap alloc
-	createUselessHeap(300)
+	createUselessHeap()
 
 	return &pb.StockInfo{Ticker: stock.Ticker, Company: stock.Company, Description: stock.Description}, err
 }
