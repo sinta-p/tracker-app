@@ -37,8 +37,11 @@ jobs:
         REPOSITORY: primuslearning
         IMAGE_TAG: 1.1
       run: |
-        docker build . -f http_server/Dockerfile -t $REGISTRY/$REPOSITORY:http_server 
+        cd http_server
+        docker build -f http_server/Dockerfile -t $REGISTRY/$REPOSITORY:http_server 
         docker push $REGISTRY/$REPOSITORY:http_server
+        cd .. 
+        
 
 
 
