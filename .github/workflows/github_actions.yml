@@ -38,7 +38,7 @@ jobs:
         IMAGE_TAG: 1.1
       run: |
         cd http_server
-        docker build -f Dockerfile -t $REGISTRY/$REPOSITORY:http_server 
+        docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:http_server 
         docker push $REGISTRY/$REPOSITORY:http_server
         cd .. 
 
