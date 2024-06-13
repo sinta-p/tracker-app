@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  set-up:
+  deploy:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
@@ -30,13 +30,19 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
   
+    - name: test 
+      run: | 
+        ls -lrta 
+        cd http_server
+        ls -lrta 
+
     - name: Build, tag, and push docker image to Amazon ECR
       env:
         REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         REPOSITORY: primuslearning
         IMAGE_TAG: 1.1
       run: |
-        docker build ./http_server -f Dockerfile -t $REGISTRY/$REPOSITORY:http_server 
+        docker build http_server -f Dockerfile -t $REGISTRY/$REPOSITORY:http_server 
         docker push $REGISTRY/$REPOSITORY:http_server
 
 
