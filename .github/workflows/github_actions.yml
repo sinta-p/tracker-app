@@ -70,7 +70,7 @@ jobs:
 
 
     - name: Update kube config
-      run: aws eks update-kubeconfig --name primuslearning
+      run: aws eks update-kubeconfig --region il-central-1 --name sinsandbox
     
     - name: Deploy to EKS
       run: |
