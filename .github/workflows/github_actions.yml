@@ -56,12 +56,12 @@ jobs:
         docker push $REGISTRY/$REPOSITORY:backend_high_cpu
         cd .. 
 
-        cd backend_server_high_alloc
+        cd backend_server_high_heap
         docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:backend_high_heap 
         docker push $REGISTRY/$REPOSITORY:backend_high_heap
         cd .. 
 
-        cd backend_server_high_alloc
+        cd backend_server_mutex
         docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:backend_mutex
         docker push $REGISTRY/$REPOSITORY:backend_mutex
         cd .. 
