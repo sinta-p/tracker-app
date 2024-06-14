@@ -41,6 +41,11 @@ jobs:
         docker push $REGISTRY/$REPOSITORY:http_server
         cd .. 
 
+        cd backend_server
+        docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:backend_server 
+        docker push $REGISTRY/$REPOSITORY:backend_server
+        cd .. 
+
 
 
 
