@@ -43,12 +43,27 @@ jobs:
 
         cd backend_server
         docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:backend 
-        docker push $REGISTRY/$REPOSITORY:backend_server
+        docker push $REGISTRY/$REPOSITORY:backend
         cd .. 
 
         cd backend_server_high_alloc
         docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:backend_high_alloc 
-        docker push $REGISTRY/$REPOSITORY:backend_server
+        docker push $REGISTRY/$REPOSITORY:backend_high_alloc
+        cd .. 
+
+        cd backend_server_high_cpu
+        docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:backend_high_cpu 
+        docker push $REGISTRY/$REPOSITORY:backend_high_cpu
+        cd .. 
+
+        cd backend_server_high_alloc
+        docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:backend_high_heap 
+        docker push $REGISTRY/$REPOSITORY:backend_high_heap
+        cd .. 
+
+        cd backend_server_high_alloc
+        docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:backend_mutex
+        docker push $REGISTRY/$REPOSITORY:backend_mutex
         cd .. 
 
 
