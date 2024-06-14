@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose --file /Users/sinta/go/src/github.com/sinta-p/tracker-app/k8s/compose4kompose.yml convert
+    kompose.version: 1.34.0 (cbf2835db)
+  labels:
+    io.kompose.service: backend-high-heap
+  name: backend-high-heap
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: backend-high-heap
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose --file /Users/sinta/go/src/github.com/sinta-p/tracker-app/k8s/compose4kompose.yml convert
+        kompose.version: 1.34.0 (cbf2835db)
+      labels:
+        io.kompose.service: backend-high-heap
+    spec:
+      containers:
+        - image: 601427279990.dkr.ecr.il-central-1.amazonaws.com/tracker-app:backend_high_heap
+          name: backend-high-heap
+          ports:
+            - containerPort: 50054
+              protocol: TCP
+      restartPolicy: Always
