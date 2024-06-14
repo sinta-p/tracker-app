@@ -1,0 +1,48 @@
+version: '3.9'
+
+services:
+  http:
+    image: 601427279990.dkr.ecr.il-central-1.amazonaws.com/tracker-app:http_server
+    restart: always
+    ports:
+      - 1313:1313
+
+  backend-main:
+    image: 601427279990.dkr.ecr.il-central-1.amazonaws.com/tracker-app:backend
+    ports:
+      - 50051:50051
+
+  backend-high-cpu:
+    image: 601427279990.dkr.ecr.il-central-1.amazonaws.com/tracker-app:backend_high_cpu
+    ports:
+      - 50052:50052
+
+  backend-high-alloc:
+    image: 601427279990.dkr.ecr.il-central-1.amazonaws.com/tracker-app:backend_high_alloc
+    ports:
+      - 50053:50053
+
+  backend-high-heap:
+    image: 601427279990.dkr.ecr.il-central-1.amazonaws.com/tracker-app:backend_high_heap
+    ports:
+      - 50054:50054
+
+  backend-mutex:
+    image: 601427279990.dkr.ecr.il-central-1.amazonaws.com/tracker-app:backend_mutex
+    ports:
+      - 50055:50055
+
+  mysql:
+    image: mysql:8
+    ports:
+      - 3306:3306
+    volumes:
+      - ./data_volume:/var/lib/mysql
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    environment:
+      - MYSQL_ROOT_PASSWORD=ddog
+      - MYSQL_PASSWORD=ddog
+      - MYSQL_USER=tracker
+      - MYSQL_DATABASE=tracker_db
+      - DD_AGENT_HOST=datadog-agent
+
