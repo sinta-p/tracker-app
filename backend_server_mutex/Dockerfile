@@ -18,6 +18,8 @@ RUN go mod download
 # Copy the code into the container
 COPY . .
 
+RUN ls -lrta
+
 # Build the application
 RUN go build -o main .
 

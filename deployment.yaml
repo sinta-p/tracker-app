@@ -1,0 +1,136 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: http
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: http
+  template:
+    metadata:
+      labels:
+        app: http
+    spec:
+      containers:
+      - name: http
+        image: sinta-p/tracker-app-http
+        ports:
+        - containerPort: 1313
+        env:
+        - name: DD_AGENT_HOST
+          value: datadog-agent
+        - name: DD_TRACE_AGENT_PORT
+          value: "8126"
+        - name: DD_ENV
+          value: dev
+        - name: DD_SERVICE
+          value: tracker
+        - name: DD_VERSION
+          value: "1.1"
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-main
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-main
+  template:
+    metadata:
+      labels:
+        app: backend-main
+    spec:
+      containers:
+      - name: backend-main
+        image: sinta-p/tracker-app-backend
+        ports:
+        - containerPort: 50051
+        env:
+        - name: DD_AGENT_HOST
+          value: datadog-agent
+        - name: DD_TRACE_AGENT_PORT
+          value: "8126"
+        - name: DD_ENV
+          value: dev
+        - name: DD_SERVICE
+          value: tracker
+        - name: DD_VERSION
+          value: "1.1"
+
+---
+
+# Repeat the above Deployment block for each backend service similarly.
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  ports:
+  - port: 3306
+    targetPort: 3306
+  selector:
+    app: mysql
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: datadog-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: datadog-agent
+  template:
+    metadata:
+      labels:
+        app: datadog-agent
+    spec:
+      containers:
+      - name: datadog-agent
+        image: gcr.io/datadoghq/agent:latest
+        ports:
+        - containerPort: 8126
+        volumeMounts:
+        - mountPath: /var/run/docker.sock
+          name: docker-socket
+          readOnly: true
+        - mountPath: /proc/
+          name: proc
+          readOnly: true
+        - mountPath: /sys/fs/cgroup/
+          name: cgroup
+          readOnly: true
+        - mountPath: /opt/datadog-agent/run
+          name: datadog-run
+        env:
+        - name: DD_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: datadog-secret
+              key: api-key
+        - name: DD_APM_ENABLED
+          value: "true"
+        - name: DD_SITE
+          value: datadoghq.com
+        # Add other environment variables as needed.
+      volumes:
+      - name: docker-socket
+        hostPath:
+          path: /var/run/docker.sock
+      - name: proc
+        hostPath:
+          path: /proc/
+      - name: cgroup
+        hostPath:
+          path: /sys/fs/cgroup/
+      - name: datadog-run
+        hostPath:
+          path: /opt/datadog-agent/run
