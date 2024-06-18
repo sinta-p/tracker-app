@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: http
+  name: tracker-http
   labels:
-    io.kompose.service: http
+    io.kompose.service: tracker-http
     tags.datadoghq.com/env: k8s-demo
     tags.datadoghq.com/service: tracker-http
     tags.datadoghq.com/version: 1.0.0
@@ -49,5 +49,5 @@ spec:
             - name: DD_VERSION
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.labels['tags.datadoghq.com/version']exi
+                  fieldPath: metadata.labels['tags.datadoghq.com/version']
       restartPolicy: Always

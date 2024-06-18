@@ -5,12 +5,12 @@ metadata:
     kompose.cmd: kompose --file /Users/sinta/go/src/github.com/sinta-p/tracker-app/k8s/compose4kompose.yml convert
     kompose.version: 1.34.0 (cbf2835db)
   labels:
-    io.kompose.service: http
-  name: http
+    io.kompose.service: tracker-http
+  name: tracker-http
 spec:
   ports:
     - name: "1313"
       port: 1313
       targetPort: 1313
   selector:
-    io.kompose.service: http
+    io.kompose.service: tracker-http
