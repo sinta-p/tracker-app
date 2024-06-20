@@ -1,0 +1,21 @@
+apiVersion: linkerd.io/v1alpha2
+kind: ServiceProfile
+metadata:
+  name: backend-main.profile
+  namespace: default
+spec:
+  routes:
+  - name: /TickerManager/TickerRequest
+    condition:
+      method: "*"
+    responseClasses:
+    - condition:
+        status:
+          min: 200
+          max: 499
+      isFailure: false
+    - condition:
+        status:
+          min: 500
+          max: 599
+      isFailure: true

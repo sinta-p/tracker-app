@@ -6,6 +6,9 @@ metadata:
     kompose.version: 1.34.0 (cbf2835db)
   labels:
     io.kompose.service: backend-main
+    tags.datadoghq.com/env: k8s-demo
+    tags.datadoghq.com/service: backend-main
+    tags.datadoghq.com/version: 1.0.0
   name: backend-main
 spec:
   replicas: 1
@@ -17,13 +20,38 @@ spec:
       annotations:
         kompose.cmd: kompose --file /Users/sinta/go/src/github.com/sinta-p/tracker-app/k8s/compose4kompose.yml convert
         kompose.version: 1.34.0 (cbf2835db)
+        linkerd.io/inject: enabled
       labels:
         io.kompose.service: backend-main
+        tags.datadoghq.com/env: k8s-demo
+        tags.datadoghq.com/service: backend-main
+        tags.datadoghq.com/version: 1.0.0
+
     spec:
+      volumes:
+        - hostPath:
+            path: /var/run/datadog/
+          name: apmsocketpath
       containers:
         - image: 601427279990.dkr.ecr.il-central-1.amazonaws.com/tracker-app:backend
           name: backend-main
+          volumeMounts:
+            - name: apmsocketpath
+              mountPath: /var/run/datadog
           ports:
             - containerPort: 50051
               protocol: TCP
+          env:
+            - name: DD_ENV
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/env']
+            - name: DD_SERVICE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/service']
+            - name: DD_VERSION
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/version']
       restartPolicy: Always
