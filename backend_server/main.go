@@ -63,7 +63,7 @@ func (s *server) SelectTicker(ctx context.Context, in *pb.TickerRequest) (*pb.St
 
 // grpc declarations
 var (
-	port = flag.Int("port", 3000, "The server port")
+	port = flag.Int("port", 50051, "The server port")
 )
 
 type server struct {
