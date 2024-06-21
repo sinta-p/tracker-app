@@ -18,7 +18,7 @@ RUN go mod download
 # Copy the code into the container
 COPY . .
 
-RUN ls -lrta
+RUN ls -lrta grpc
 
 # Build the application
 RUN go build -o main .

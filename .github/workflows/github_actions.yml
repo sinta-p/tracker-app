@@ -36,6 +36,12 @@ jobs:
         REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         REPOSITORY: tracker-app
       run: |
+        
+        cd backend_server_mutex
+        docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:backend_mutex
+        docker push $REGISTRY/$REPOSITORY:backend_mutex
+        cd .. 
+
         cd http_server
         docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:http_server 
         docker push $REGISTRY/$REPOSITORY:http_server
@@ -61,10 +67,6 @@ jobs:
         docker push $REGISTRY/$REPOSITORY:backend_high_heap
         cd .. 
 
-        cd backend_server_mutex
-        docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:backend_mutex
-        docker push $REGISTRY/$REPOSITORY:backend_mutex
-        cd .. 
 
 
 
