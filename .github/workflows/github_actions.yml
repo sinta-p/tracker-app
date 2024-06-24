@@ -80,7 +80,7 @@ jobs:
         kubectl apply -f k8s/output/http-service.yaml
 
         kubectl apply -f k8s/output/backend-main-deployment.yaml
-        kubectl apply -f k8s/output/backend-service-deployment.yaml
+        kubectl apply -f k8s/output/backend-main-service.yaml
 
         kubectl apply -f k8s/output/mysql-deployment.yaml
         kubectl apply -f k8s/output/mysql-service.yaml
