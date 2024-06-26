@@ -127,7 +127,7 @@ func main() {
 	ui := grpctrace.UnaryServerInterceptor(grpctrace.WithServiceName("ticker-manager4"))
 
 	// Create a listener for the server
-	lis, err := net.Listen("tcp", fmt.Sprintf("backend-high-heap:%d", *port))
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
