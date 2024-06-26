@@ -21,7 +21,7 @@ spec:
         io.kompose.service: backend-high-alloc
     spec:
       containers:
-        - image: 601427279990.dkr.ecr.il-central-1.amazonaws.com/tracker-app:backend_high_alloc
+        - image: 601427279990.dkr.ecr.il-central-1.amazonaws.com/tracker-app:backend_high_alloc-1
           name: backend-high-alloc
           ports:
             - containerPort: 50053
