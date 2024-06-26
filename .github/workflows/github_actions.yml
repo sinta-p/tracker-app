@@ -84,7 +84,17 @@ jobs:
 
         kubectl apply -f k8s/output/mysql-deployment.yaml
         kubectl apply -f k8s/output/mysql-service.yaml
-
         kubectl apply -f k8s/output/mysql-claim0-persistentvolumeclaim.yaml
         kubectl apply -f k8s/output/mysql-claim1-persistentvolumeclaim.yaml
         
+        kubectl apply -f k8s/output/backend-high-cpu-deployment.yaml
+        kubectl apply -f k8s/output/backend-high-cpu-service.yaml
+
+        kubectl apply -f k8s/output/backend-high-alloc-deployment.yaml
+        kubectl apply -f k8s/output/backend-high-alloc-service.yaml
+
+        kubectl apply -f k8s/output/backend-high-heap-deployment.yaml
+        kubectl apply -f k8s/output/backend-high-heap-service.yaml
+
+        kubectl apply -f k8s/output/backend-mutex-deployment.yaml
+        kubectl apply -f k8s/output/backend-mutex-service.yaml

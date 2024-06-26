@@ -40,15 +40,15 @@ spec:
             - containerPort: 3306
               protocol: TCP
           volumeMounts:
-            - mountPath: /var/lib/mysql
+            - mountPath: /var/lib/mysql/
               name: mysql-claim0
-            - mountPath: /docker-entrypoint-initdb.d
-              name: mysql-claim1
+            - mountPath: /docker-entrypoint-initdb.d/
+              name: mysql-init
       restartPolicy: Always
       volumes:
         - name: mysql-claim0
           persistentVolumeClaim:
             claimName: mysql-claim0
-        - name: mysql-claim1
-          persistentVolumeClaim:
-            claimName: mysql-claim1
+        - name: mysql-init
+          configMap:
+            name: mysql-init

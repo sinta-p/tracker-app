@@ -5,6 +5,7 @@ metadata:
     io.kompose.service: mysql-claim0
   name: mysql-claim0
 spec:
+  # volumeName: mysql-pv-0
   accessModes:
     - ReadWriteOnce
   resources:
