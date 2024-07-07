@@ -103,6 +103,7 @@ func main() {
 		profiler.WithEnv("dev"),
 		profiler.WithVersion("1.0.0"),
 		profiler.WithTags("owner:sin,app:tracker-app"),
+		profiler.WithAgentAddr("datadog-agent:8126"),
 		profiler.WithProfileTypes(
 			profiler.CPUProfile,
 			profiler.HeapProfile,
