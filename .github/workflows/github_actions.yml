@@ -37,20 +37,20 @@ jobs:
         REPOSITORY: tracker-app
       run: |
         
-        cd backend_server_mutex
-        docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:backend_mutex-1
-        docker push $REGISTRY/$REPOSITORY:backend_mutex-1
-        cd .. 
-
-        cd backend_server_high_cpu
-        docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:backend_high_cpu-2
-        docker push $REGISTRY/$REPOSITORY:backend_high_cpu-2
-        cd .. 
-
-        # cd http_server
-        # docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:http_server 
-        # docker push $REGISTRY/$REPOSITORY:http_server
+        # cd backend_server_mutex
+        # docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:backend_mutex-1
+        # docker push $REGISTRY/$REPOSITORY:backend_mutex-1
         # cd .. 
+
+        # cd backend_server_high_cpu
+        # docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:backend_high_cpu-2
+        # docker push $REGISTRY/$REPOSITORY:backend_high_cpu-2
+        # cd .. 
+
+        cd http_server
+        docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:http_server 
+        docker push $REGISTRY/$REPOSITORY:http_server
+        cd .. 
 
         # cd backend_server
         # docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:backend-1 
@@ -64,10 +64,10 @@ jobs:
 
         
 
-        cd backend_server_high_heap
-        docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:backend_high_heap-1 
-        docker push $REGISTRY/$REPOSITORY:backend_high_heap-1
-        cd .. 
+        # cd backend_server_high_heap
+        # docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:backend_high_heap-1 
+        # docker push $REGISTRY/$REPOSITORY:backend_high_heap-1
+        # cd .. 
 
 
 
