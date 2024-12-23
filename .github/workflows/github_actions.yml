@@ -48,8 +48,8 @@ jobs:
         # cd .. 
 
         cd http_server
-        docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:http_server 
-        docker push $REGISTRY/$REPOSITORY:http_server
+        docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:http_server -1
+        docker push $REGISTRY/$REPOSITORY:http_server-1
         cd .. 
 
         # cd backend_server
