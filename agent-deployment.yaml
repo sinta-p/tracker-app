@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: datadog-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: datadog-agent
+  template:
+    metadata:
+      labels:
+        app: datadog-agent
+    spec:
+      containers:
+      - name: datadog-agent
+        image: gcr.io/datadoghq/agent:latest
+        ports:
+        - containerPort: 8126
+        volumeMounts:
+        - mountPath: /var/run/docker.sock
+          name: docker-socket
+          readOnly: true
+        - mountPath: /proc/
+          name: proc
+          readOnly: true
+        - mountPath: /sys/fs/cgroup/
+          name: cgroup
+          readOnly: true
+        - mountPath: /opt/datadog-agent/run
+          name: datadog-run
+        env:
+        - name: DD_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: datadog-secret
+              key: api-key
+        - name: DD_APM_ENABLED
+          value: "true"
+        - name: DD_SITE
+          value: datadoghq.com
+        # Add other environment variables as needed.
+      volumes:
+      - name: docker-socket
+        hostPath:
+          path: /var/run/docker.sock
+      - name: proc
+        hostPath:
+          path: /proc/
+      - name: cgroup
+        hostPath:
+          path: /sys/fs/cgroup/
+      - name: datadog-run
+        hostPath:
+          path: /opt/datadog-agent/run
