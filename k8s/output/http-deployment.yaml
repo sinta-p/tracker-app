@@ -30,7 +30,7 @@ spec:
             path: /var/run/datadog/
           name: apmsocketpath
       containers:
-        - image: 601427279990.dkr.ecr.il-central-1.amazonaws.com/tracker-app:http_server
+        - image: 601427279990.dkr.ecr.il-central-1.amazonaws.com/tracker-app:http_server-1
           name: tracker-http
           volumeMounts:
             - name: apmsocketpath
