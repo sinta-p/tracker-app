@@ -53,8 +53,8 @@ jobs:
         cd .. 
 
         # cd backend_server
-        # docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:backend-1 
-        # docker push $REGISTRY/$REPOSITORY:backend-1
+        # docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:backend-2 
+        # docker push $REGISTRY/$REPOSITORY:backend-2
         # cd .. 
 
         # cd backend_server_high_alloc
