@@ -96,7 +96,7 @@ func main() {
 		tracer.WithEnv("dev"),
 		tracer.WithService("ticker-manager4"),
 		tracer.WithServiceVersion("1.0.0"),
-		tracer.WithAgentAddr("datadog-agent:8126"),
+		tracer.WithAgentAddr("datadog-agent.datadog-ns.svc.cluster.local:8126"),
 	)
 	defer tracer.Stop()
 
