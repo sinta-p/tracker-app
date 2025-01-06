@@ -139,7 +139,7 @@ func deleteStock(w http.ResponseWriter, r *http.Request) {
 
 }
 
-//Frontend Maangement
+// Frontend Maangement
 func homePage(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Welcome to the HomePage!")
 	fmt.Println("Endpoint Hit: homePage")
@@ -185,6 +185,7 @@ func main() {
 		profiler.WithEnv("dev"),
 		profiler.WithVersion("1.0.0"),
 		profiler.WithTags("owner:sin,app:tracker-app"),
+		profiler.WithAgentAddr("datadog-agent.datadog-ns.svc.cluster.local:8126"),
 		profiler.WithProfileTypes(
 			profiler.CPUProfile,
 			profiler.HeapProfile,
