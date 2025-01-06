@@ -21,7 +21,7 @@ spec:
         io.kompose.service: backend-high-cpu
     spec:
       containers:
-        - image: 601427279990.dkr.ecr.il-central-1.amazonaws.com/tracker-app:backend_high_cpu-3
+        - image: 601427279990.dkr.ecr.il-central-1.amazonaws.com/tracker-app:backend_high_cpu-4
           name: backend-high-cpu
           ports:
             - containerPort: 50052

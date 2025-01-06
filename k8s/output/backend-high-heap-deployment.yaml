@@ -21,7 +21,7 @@ spec:
         io.kompose.service: backend-high-heap
     spec:
       containers:
-        - image: 601427279990.dkr.ecr.il-central-1.amazonaws.com/tracker-app:backend_high_heap-2
+        - image: 601427279990.dkr.ecr.il-central-1.amazonaws.com/tracker-app:backend_high_heap-3
           name: backend-high-heap
           ports:
             - containerPort: 50054
