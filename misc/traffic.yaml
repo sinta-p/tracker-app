@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: curl-pod-job
+spec:
+  template:
+    metadata:
+      labels:
+        app: curl-pod
+    spec:
+      containers:
+      - name: curl-container
+        image: curlimages/curl:latest # A lightweight curl image
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            while true; do
+              curl -s http://tracker-http:1313/stock/DDOG || echo "Pod not reachable";
+            done
+      restartPolicy: Never
+  backoffLimit: 0
+

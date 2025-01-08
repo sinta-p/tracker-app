@@ -29,6 +29,9 @@ jobs:
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
+      with:
+          mask-password: 'false'
+
   
 
     - name: Build, tag, and push docker image to Amazon ECR
@@ -37,37 +40,37 @@ jobs:
         REPOSITORY: tracker-app
       run: |
         
-        cd backend_server_mutex
-        docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:backend_mutex-3
-        docker push $REGISTRY/$REPOSITORY:backend_mutex-3
-        cd .. 
+        # cd backend_server_mutex
+        # docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:backend_mutex-3
+        # docker push $REGISTRY/$REPOSITORY:backend_mutex-3
+        # cd .. 
 
-        cd backend_server_high_cpu
-        docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:backend_high_cpu-4
-        docker push $REGISTRY/$REPOSITORY:backend_high_cpu-4
-        cd .. 
+        # cd backend_server_high_cpu
+        # docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:backend_high_cpu-4
+        # docker push $REGISTRY/$REPOSITORY:backend_high_cpu-4
+        # cd .. 
 
-        cd http_server
-        docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:http_server-2
-        docker push $REGISTRY/$REPOSITORY:http_server-2
-        cd .. 
+        # cd http_server
+        # docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:http_server-2
+        # docker push $REGISTRY/$REPOSITORY:http_server-2
+        # cd .. 
 
-        cd backend_server
-        docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:backend-3 
-        docker push $REGISTRY/$REPOSITORY:backend-3
-        cd .. 
+        # cd backend_server
+        # docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:backend-3 
+        # docker push $REGISTRY/$REPOSITORY:backend-3
+        # cd .. 
 
-        cd backend_server_high_alloc
-        docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:backend_high_alloc-3 
-        docker push $REGISTRY/$REPOSITORY:backend_high_alloc-3
-        cd .. 
+        # cd backend_server_high_alloc
+        # docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:backend_high_alloc-3 
+        # docker push $REGISTRY/$REPOSITORY:backend_high_alloc-3
+        # cd .. 
 
         
 
-        cd backend_server_high_heap
-        docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:backend_high_heap-3
-        docker push $REGISTRY/$REPOSITORY:backend_high_heap-3
-        cd .. 
+        # cd backend_server_high_heap
+        # docker build . -f Dockerfile -t $REGISTRY/$REPOSITORY:backend_high_heap-3
+        # docker push $REGISTRY/$REPOSITORY:backend_high_heap-3
+        # cd .. 
 
 
 
