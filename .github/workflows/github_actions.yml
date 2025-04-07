@@ -27,9 +27,12 @@ jobs:
       run: |  
         go version 
         cd /home/runner/work/tracker-app/tracker-app
+
+        # run test for http server 
         cd http_server
         go test
 
+        # run test for backend server 
         cd ../backend_server 
         go test 
 
