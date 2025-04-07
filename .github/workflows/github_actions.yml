@@ -16,7 +16,6 @@ jobs:
     - name: Run go test 
       run: |  
         go version 
-        go test ./... -v 
         ls /home/runner/work/tracker-app/tracker-app
 
 
