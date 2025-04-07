@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -168,6 +169,15 @@ var (
 	c5 = pb.NewTickerManager5Client(nil)
 )
 
+// Testing
+func FakeTester(input int) string {
+	isfoo := (input % 3) == 0
+	if isfoo {
+		return "Foo"
+	}
+	return strconv.Itoa(input)
+}
+
 func main() {
 	flag.Parse()
 	//set up tracer
@@ -248,7 +258,5 @@ func main() {
 
 	//take http request
 	handleRequests()
-
-	// add test
 
 }
