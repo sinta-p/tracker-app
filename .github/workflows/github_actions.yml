@@ -16,7 +16,12 @@ jobs:
     - name: Run go test 
       run: |  
         go version 
-        ls /home/runner/work/tracker-app/tracker-app
+        cd /home/runner/work/tracker-app/tracker-app
+        cd http_server
+        go test
+
+        cd ../backend_server 
+        go test 
 
 
     - name: Install kubectl
