@@ -13,6 +13,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Run go test 
+      run: |  
+        go version 
+        go test ./... -v 
+        ls /home/runner/work/tracker-app/tracker-app
+
+
     - name: Install kubectl
       uses: azure/setup-kubectl@v3
       with:
@@ -32,12 +39,6 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v1
       with:
           mask-password: 'true'
-
-    - name: Run go test 
-      run: |  
-        go version 
-        go test ./... -v 
-        ls 
 
     - name: Build, tag, and push docker image to Amazon ECR
       env:
