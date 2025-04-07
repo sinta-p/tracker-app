@@ -14,19 +14,16 @@ jobs:
       uses: actions/checkout@v4
 
 
-    - name: Configure Datadog Test Optimization
-      uses: datadog/test-visibility-github-action@v2
-      with:
-        languages: go
-        api_key: ${{secrets.DD_API_KEY}}
-        site: datadoghq.com
+    - name: Install orchestrion
+      run: go install github.com/DataDog/orchestrion@latest
 
 
     - name: Run go test 
       env:
-        DD_CIVISIBILITY_AGENTLESS_ENABLED: "true"
+        DD_CIVISIBILITY_ENABLED: true
+        DD_CIVISIBILITY_AGENTLESS_ENABLED: true
         DD_SITE: datadoghq.com
-        DD_API_KEY: ${{ secrets.DD_API_KEY }}
+        DD_API_KEY: ${{secrets.DD_API_KEY}}
       run: |  
         go version 
         cd /home/runner/work/tracker-app/tracker-app
