@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"strconv"
 
 	"google.golang.org/grpc"
 
@@ -68,6 +69,23 @@ var (
 
 type server struct {
 	pb.UnimplementedTickerManagerServer
+}
+
+// For Testing
+func Fooer(input int) string {
+	isfoo := (input % 3) == 0
+	if isfoo {
+		return "Foo"
+	}
+	return strconv.Itoa(input)
+}
+
+func Fooer2(input int) string {
+	isfoo := (input % 3) == 0
+	if isfoo {
+		return "Foo"
+	}
+	return strconv.Itoa(input)
 }
 
 // Main
