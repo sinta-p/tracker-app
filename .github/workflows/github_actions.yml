@@ -31,6 +31,7 @@ jobs:
         go version 
         cd /home/runner/work/tracker-app/tracker-app
 
+        echo $PATH
         # run test for http server 
         cd http_server
         orchestrion go test
