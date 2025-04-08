@@ -17,6 +17,7 @@ jobs:
     - name: Install orchestrion
       run: |
         go install github.com/DataDog/orchestrion@latest
+        export GOPATH=$HOME/go
         export PATH=$PATH:`go env GOPATH`/bin
 
 
