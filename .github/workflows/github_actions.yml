@@ -17,9 +17,6 @@ jobs:
     - name: Install orchestrion
       run: |
         go install github.com/DataDog/orchestrion@latest
-        export GOPATH=$HOME/go
-        export PATH=$PATH:`go env GOPATH`/bin
-
 
     - name: Run go test 
       env:
@@ -28,10 +25,13 @@ jobs:
         DD_SITE: datadoghq.com
         DD_API_KEY: ${{secrets.DD_API_KEY}}
       run: |  
+        export GOPATH=$HOME/go
+        export PATH=$PATH:`go env GOPATH`/bin
+        echo $PATH
+
         go version 
         cd /home/runner/work/tracker-app/tracker-app
 
-        echo $PATH
         # run test for http server 
         cd http_server
         orchestrion go test
