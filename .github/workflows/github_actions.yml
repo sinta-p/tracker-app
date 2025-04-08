@@ -30,15 +30,17 @@ jobs:
         echo $PATH
 
         go version 
+
+        go test
         cd /home/runner/work/tracker-app/tracker-app
 
         # run test for http server 
         cd http_server
-        orchestrion go test
+        orchestrion go test ./..
 
         # run test for backend server 
         cd ../backend_server 
-        orchestrion go test 
+        orchestrion go test ./..
 
 
     - name: Install kubectl
