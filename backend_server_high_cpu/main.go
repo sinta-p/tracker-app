@@ -81,7 +81,7 @@ var (
 )
 
 var (
-	port2 = flag.Int("port2", 50053, "The client port")
+	port2 = flag.Int("port3", 50054, "The client port")
 )
 
 type server struct {
