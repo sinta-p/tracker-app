@@ -10,7 +10,7 @@ func TestFooer(t *testing.T) {
 }
 
 func TestFooer2(t *testing.T) {
-	result := Fooer2(3)
+	result := Fooer2(6)
 	if result != "Foo" {
 		t.Errorf("Result was incorrect, got: %s, want: %s.", result, "Foo")
 	}
