@@ -13,7 +13,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-
     - name: Install orchestrion
       run: |
         go install github.com/DataDog/orchestrion@latest
