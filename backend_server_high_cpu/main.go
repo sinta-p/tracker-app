@@ -80,6 +80,10 @@ var (
 	port = flag.Int("port", 50052, "The server port")
 )
 
+var (
+	port2 = flag.Int("port2", 50053, "The client port")
+)
+
 type server struct {
 	pb.UnimplementedTickerManager2Server
 }
