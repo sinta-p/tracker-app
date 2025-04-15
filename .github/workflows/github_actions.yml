@@ -13,7 +13,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Install orchestrion
+    - name: Install orchestrionservice:rapid-ci-app
       run: |
         go install github.com/DataDog/orchestrion@latest
 
@@ -21,6 +21,7 @@ jobs:
       env:
         DD_CIVISIBILITY_ENABLED: true
         DD_CIVISIBILITY_AGENTLESS_ENABLED: true
+        DD_CIVISIBILITY_ITR_ENABLED: true
         DD_SITE: datadoghq.com
         DD_API_KEY: ${{secrets.DD_API_KEY}}
       run: |  
