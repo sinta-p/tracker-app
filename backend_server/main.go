@@ -96,7 +96,7 @@ func main() {
 	tracer.Start(
 		tracer.WithEnv("dev"),
 		tracer.WithService("ticker-manager"),
-		tracer.WithServiceVersion("1.0.0"),
+		tracer.WithServiceVersion("1.0.1"),
 		tracer.WithAgentAddr("datadog-agent.datadog-ns.svc.cluster.local:8126"),
 	)
 	defer tracer.Stop()
@@ -105,7 +105,7 @@ func main() {
 	err := profiler.Start(
 		profiler.WithService("ticker-manager"),
 		profiler.WithEnv("dev"),
-		profiler.WithVersion("1.0.0"),
+		profiler.WithVersion("1.0.1"),
 		profiler.WithTags("owner:sin,app:tracker-app"),
 		profiler.WithAgentAddr("datadog-agent.datadog-ns.svc.cluster.local:8126"),
 		profiler.WithProfileTypes(
