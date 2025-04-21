@@ -81,7 +81,7 @@ func Fooer(input int) string {
 }
 
 func Fooer2(input int) string {
-	isfoo := (input % 4) == 0
+	isfoo := (input % 3) == 0
 	if isfoo {
 		return "Foo"
 	}
