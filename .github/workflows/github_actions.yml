@@ -7,9 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  test_and_deploy:
-    runs-on: ubuntu-latest
-    steps:
+  test: 
     - name: Checkout code
       uses: actions/checkout@v4
 
@@ -40,6 +38,17 @@ jobs:
         cd ../backend_server 
         orchestrion go test ./...
 
+
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install orchestrionservice:rapid-ci-app
+      run: |
+        go install github.com/DataDog/orchestrion@latest
 
     - name: Install kubectl
       uses: azure/setup-kubectl@v3
