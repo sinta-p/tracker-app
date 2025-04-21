@@ -34,11 +34,11 @@ jobs:
 
         # run test for http server 
         cd http_server
-        orchestrion go test ./...
+        orchestrion go test ./... -cover -covermode=count -coverpkg ./...
 
         # run test for backend server 
         cd ../backend_server 
-        orchestrion go test ./...
+        orchestrion go test ./... -cover -covermode=count -coverpkg ./...
 
 
 
