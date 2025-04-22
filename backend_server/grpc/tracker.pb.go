@@ -129,7 +129,7 @@ func (x *StockInfo) GetTicker() string {
 	if x != nil {
 		return x.Ticker
 	}
-	return ""
+	return "a"
 }
 
 func (x *StockInfo) GetCompany() string {
