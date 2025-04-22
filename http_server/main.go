@@ -173,7 +173,7 @@ var (
 func FakeTester(input int) string {
 	isfoo := (input % 3) == 0
 	if isfoo {
-		return "Fooa"
+		return "Foo"
 	}
 	return strconv.Itoa(input)
 }
